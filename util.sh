@@ -3,7 +3,7 @@
 # --------------------------------------------------------------------------- #
 # 获取文件名后缀
 # Parameter1: 文件名
-# output: Yes
+# output: 后缀名
 # return: None
 # --------------------------------------------------------------------------- #
 function FileSuffix() {
@@ -16,7 +16,7 @@ function FileSuffix() {
 # --------------------------------------------------------------------------- #
 # 获取文件名前缀
 # Parameter1: 文件名
-# output: Yes
+# output: 前缀名
 # return: None
 # --------------------------------------------------------------------------- #
 function FilePrefix() {
@@ -36,9 +36,28 @@ function FilePrefix() {
 function IsSuffix() {
     local filename="$1"
     local suffix="$2"
-    if [ "$(FileSuffix ${filename})" = "$suffix" ]; then
+    if [ "$(FileSuffix $filename)" = "$suffix" ]; then
         return 0
     else
         return 1
     fi
+}
+
+# --------------------------------------------------------------------------- #
+# 判断进程是否正在运行
+# Parameter1: 进程名
+# output: 进程ID
+# return: 0: 进程正在运行；1: 进程不存在；2：进程存在，但没有在运行
+# --------------------------------------------------------------------------- #
+function ProcessIsRunning() {
+    local process="$1"
+    local pid=$(ps -ef | grep $process | grep -v grep | awk '{print $2}')
+    if [ -z "$pid" ]; then
+        return 1
+    fi
+    if ps -p $pid > /dev/null; then
+        echo "$pid"
+        return 0
+    fi
+    return 2
 }
