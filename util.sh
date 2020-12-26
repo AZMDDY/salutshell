@@ -55,7 +55,7 @@ function ProcessIsRunning() {
     if [ -z "$pid" ]; then
         return 1
     fi
-    if ps -p $pid > /dev/null; then
+    if ps -p $pid >/dev/null; then
         echo "$pid"
         return 0
     fi
